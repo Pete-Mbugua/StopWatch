@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.png" type="image/x-icon">
+</head>
+
+<body>
+    <div class="w3-display-middle w3-card w3-padding w3-round-xxlarge w3-container">
+        <p id="time" class="w3-large w3-monospace w3-border w3-padding w3-round-xxlarge" style="text-align: center;">00:00:00</p>
+        <p class="w3-border-bottom w3-border-top" style="text-align: center; font-weight: 800;">--- STOPWATCH ---</p>
+        <button type="button" title="START" class="w3-button w3-margin w3-border-bottom w3-green w3-round-xxlarge" onclick="startStopwatch()">START</button>
+        <button type="button" title="STOP" class="w3-button w3-margin w3-border-bottom w3-red w3-round-xxlarge" onclick="stopStopwatch()">STOP</button>
+        <button type="button" title="RESET" class="w3-button w3-margin w3-border-bottom w3-amber w3-round-xxlarge" onclick="resetStopwatch()">RESET</button>
+    </div>
+
+    <script>
+        var startTime;
+        var elapsedTime = 0;
+        var timerInterval;
+
+        function startStopwatch() {
+            startTime = Date.now() - elapsedTime;
+            timerInterval = setInterval(updateStopwatch, 10); // Update every 10 milliseconds
+        }
+
+        function stopStopwatch() {
+            clearInterval(timerInterval);
+        }
+
+        function resetStopwatch() {
+            clearInterval(timerInterval);
+            elapsedTime = 0;
+            updateDisplay();
+        }
+
+        function updateStopwatch() {
+            elapsedTime = Date.now() - startTime;
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            var milliseconds = Math.floor(elapsedTime % 1000);
+            var seconds = Math.floor((elapsedTime / 1000) % 60);
+            var minutes = Math.floor((elapsedTime / (1000 * 60)) % 60);
+            var hours = Math.floor((elapsedTime / (1000 * 60 * 60)) % 24);
+
+            milliseconds = padNumber(milliseconds, 3);
+            seconds = padNumber(seconds, 2);
+            minutes = padNumber(minutes, 2);
+            hours = padNumber(hours, 2);
+
+            var timeDisplay = hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+            document.getElementById("time").textContent = timeDisplay;
+        }
+
+        function padNumber(number, length) {
+            var str = '' + number;
+            while (str.length < length) {
+                str = '0' + str;
+            }
+            return str;
+        }
+    </script>
+</body>
+
+</html>
